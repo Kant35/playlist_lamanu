@@ -1,0 +1,22 @@
+1. Installation du bundle Vich\Uploader
+
+2. Configuration du mapping dans 'config/packages/vich_uploader.yaml'
+
+3. Au niveau de l'entité on crée les propriété nécessaires :
+
+    3.1. créer une propriété qui va stocker en BDD le nom de la photo (string)
+
+    3.2. créer une propriété qui va nous permettre de stocker sur notre serveur le fichier réel. Cette propriété n'est PAS lié à la BDD. 
+
+    3.3. créer une dernière propriété qui est lié à la modification de l'image. (updated_at) Cette propriété est liée à la BDD. 
+
+4. Au niveau du formulaire on ajoute un champ via la propriété qui va nous permettre de stocker sur le serveur (etape 3.2)
+    On lui donne comme type VichImageType::class
+
+5. Pour afficher une photo on peut utiliser plusieurs méthode
+        1 -> Avec asset classique et concaténation
+            <img src="{{ asset('images/artists/') ~ artist.photo }}" alt="">
+        2 -> vich_uploader_asset() en lui définissant la propriété à récupérer
+            <img src="{{ vich_uploader_asset(artist, 'photoFile') }}" alt="">
+        3 -> Si je n'ai qu'une seule propriété dans mon entité qui me permet l'upload je peux passer l'objet entier sans préciser de champ particulier. vich_uploader_asset comprendra tout seul quel propriété il doit sélectionner
+            <img src="{{ vich_uploader_asset(artist) }}" alt="">

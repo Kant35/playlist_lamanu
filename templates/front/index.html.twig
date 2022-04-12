@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FrontController!{% endblock %}
+
+{% block body %}
+
+    {% for album in albums %}
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title text-secondary text-center pb-2">Titre</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Date de sortie :</h6>
+                <p class="card-text">Artiste(s) : 
+                        <a href="" class="text-info text-decoration-none">artiste</a>
+                </p>
+                <p class="card-text">
+                12 Titres    
+                </p>
+                <div class="d-flex justify-content-end">
+                    <a href="" class="card-link text-info"><i class="fa-solid fa-eye"></i></a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

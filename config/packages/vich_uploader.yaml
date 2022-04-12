@@ -1,0 +1,8 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        artists: # On définit le nom du mapping. Il nous servira pour appeler cette configuration.
+            uri_prefix: /images/artists # On définit ici le préfix de toutes nos images lié aux Artistes. On aura plus besoin de faire appel à 'images/artists/test.jpg', on pourra dirrectement appeler 'test.jpg'.
+            upload_destination: '%kernel.project_dir%/public/images/artists' # L'endroit dans notre projet ou les images vont être stocké.
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer # Donne un identifiants unique pour chaque photo uploadé.
