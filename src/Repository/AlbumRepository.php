@@ -48,19 +48,45 @@ class AlbumRepository extends ServiceEntityRepository
     // /**
     //  * @return Album[] Returns an array of Album objects
     //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllOrdered($name)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('al')
+            ->innerJoin('al.artists', 'ar')
+            ->andWhere('ar.name LIKE :name')
+            ->orderBy('al.published_at', 'DESC')
+            ->setParameter('name', '%'.$name.'%')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+
+    public function findAlbumFilter($search)
+    {
+        // Ici je crée un objet QueryBuilder sur la table Album
+        $qb = $this->createQueryBuilder('al');
+        // SI j'ai effectué une recherche en indiquant le nom de l'artiste. ALORS je peux filtrer par le nom. 
+        // Cela m'évite de faire des requête inutile en BDD.
+        if ( !empty($search['artiste']) ) {
+            $qb->innerJoin('al.artists', 'ar')
+            ->andWhere('ar.name LIKE :name')
+            ->setParameter('name', '%' . $search['artiste'] . '%');
+        }
+        if ( !empty($search['before']) ) {
+            $qb->andWhere('al.published_at < :before')
+            ->setParameter('before', $search['before']);
+        }
+        if ( !empty($search['after']) ) {
+            $qb->andWhere('al.published_at > :after')
+            ->setParameter('after', $search['after']);
+        }
+        return 
+            $qb->orderBy('al.published_at', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Album

@@ -4,22 +4,68 @@
 
 {% block body %}
 
-    {% for album in albums %}
-        <div class="card m-2" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title text-secondary text-center pb-2">Titre</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Date de sortie :</h6>
-                <p class="card-text">Artiste(s) : 
-                        <a href="" class="text-info text-decoration-none">artiste</a>
-                </p>
-                <p class="card-text">
-                12 Titres    
-                </p>
-                <div class="d-flex justify-content-end">
-                    <a href="" class="card-link text-info"><i class="fa-solid fa-eye"></i></a>
+    {# <form action="" method="POST">
+        <label class="form-label" for="artist">Artist</label>
+        <input class="form-control" type="text" name="artist" id="artist">
+
+        <button class="btn btn-primary">Envoyer</button>
+    </form> #}
+<div class="position-relative">
+    <!-- Button trigger modal -->
+    <div class="position-absolute top-0 end-0 me-5">
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Filtres
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <form action="" method="POST" class="text-center">
+                        <label class="form-label" for="artiste" >Artiste</label>
+                        <input class="form-control" name="artiste" type="text" placeholder="cherchez par Artiste" value="{{ search.artiste ?? "" }}">
+
+                        <label class="form-label" for="before">Sortie Avant</label>
+                        <input class="form-control" type="date" name="before" value="{{ (search.before is defined) ? search.before : "" }}">
+
+                        <label class="form-label" for="after">Sortie Après</label>
+                        <input class="form-control" type="date" name="after" value="{{ (search.after is defined) ? search.after : "" }}">
+
+                        <div class="d-flex justify-content-center mt-2">
+                            <button class="btn btn-primary">Envoyer</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    {% endfor %}
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-evenly pt-5">
+        {% for album in albums %}
+            <div class="card m-2" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary text-center pb-2">{{ album }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Date de sortie : {{ album.publishedAt|date("M Y") }}</h6>
+                    <p class="card-text">Artiste(s) : 
+                        {% for artist in album.artists %}
+                            <a href="{{ path('app_artist_show', {id:artist.id}) }}" class="text-info text-decoration-none">{{ artist }}</a> 
+                            {% if not loop.last %} / {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">
+                    {{ album.musics|length }} Titres    
+                    </p>
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ path('app_album_show', {id:album.id}) }}" class="card-link text-info"><i class="fa-solid fa-eye"></i></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}
