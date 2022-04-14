@@ -5,13 +5,15 @@ namespace App\Controller;
 use App\Entity\Artist;
 use App\Form\ArtistType;
 use App\Repository\ArtistRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/artist")
+ * @IsGranted("ROLE_ADMIN")
+ * @Route("/admin/artist")
  */
 class ArtistController extends AbstractController
 {
@@ -20,6 +22,13 @@ class ArtistController extends AbstractController
      */
     public function index(ArtistRepository $artistRepository): Response
     {
+        if ($this->isGranted("ROLE_ADMIN")) {
+            
+            $this->addFlash('success', "Vous n'avez pas les droits pour accéder à cette page");
+            return $this->redirectToRoute('app_login');
+
+        }
+
         return $this->render('artist/index.html.twig', [
             'artists' => $artistRepository->findAll(),
         ]);

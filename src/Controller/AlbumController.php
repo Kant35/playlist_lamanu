@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/album")
+ * @Route("/admin/album")
  */
 class AlbumController extends AbstractController
 {
