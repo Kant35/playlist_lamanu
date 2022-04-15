@@ -52,7 +52,7 @@
                 <h6 class="card-subtitle mb-2 text-muted">Date de sortie : {{ album.publishedAt|date("M Y") }}</h6>
                     <p class="card-text">Artiste(s) : 
                         {% for artist in album.artists %}
-                            <a href="{{ path('app_artist_show', {id:artist.id}) }}" class="text-info text-decoration-none">{{ artist }}</a> 
+                            <a href="{{ path('app_artist', {id:artist.id}) }}" class="text-info text-decoration-none">{{ artist }}</a> 
                             {% if not loop.last %} / {% endif %}
                         {% endfor %}
                     </p>
@@ -60,7 +60,7 @@
                     {{ album.musics|length }} Titres    
                     </p>
                     <div class="d-flex justify-content-end">
-                        <a href="{{ path('app_album_show', {id:album.id}) }}" class="card-link text-info"><i class="fa-solid fa-eye"></i></a>
+                        <a href="{{ path('app_album', {id:album.id}) }}" class="card-link text-info"><i class="fa-solid fa-eye"></i></a>
                     </div>
                 </div>
             </div>

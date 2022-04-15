@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artist{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center">{{ artist }}</h1>
+
+    <div class="d-flex justify-content-center">
+        <img src="{{ vich_uploader_asset(artist) }}" alt="">
+    </div>
+
+    <div class="col-6 mx-auto mt-5">
+        <p>{{ artist.biography }}</p>
+    
+        <h2 class="pt-3">Discographie</h2>
+
+        <ul>
+            {# Boucle sur la liste de Albums #}
+            {% for album in artist.albums %}
+                <li>{{ album }} / Publié le : {{ album.publishedAt|date('M Y') }}</li>
+            {% endfor %}
+            {# Fin de la boucle #}
+        </ul>
+    </div>
+
+{% endblock %}

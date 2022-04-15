@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Album{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center">{{ album }}</h1>
+    <p class="text-muted text-center">Sortie le : {{ album.publishedAt|date('M Y') }}</p>
+    <div class="d-flex justify-content-evenly">
+
+		{# Liste des Artistes #}
+        {% for artist in album.artists %}            
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ vich_uploader_asset(artist) }}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ artist }}</h5>
+                            <p class="card-text">{{ artist.biography|u.truncate(70, '...', false) }}</p>
+                            <div class="d-flex justify-content-end">
+                                <p> <a href="{{ path('app_artist', {id:artist.id}) }}"><small class="text-muted">Lire la suite</small></a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+		{# Fin de la boucle sur les artiste #}
+
+	</div>
+
+    <div class="col-6 mx-auto">
+        <h2>Liste des Titres</h2>
+
+        <ul>
+            {% for music in album.musics %}
+                <li>{{ music.name }} - {{ music.duration }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('app_comment_add', {id : album.id}) }}" class="btn btn-success">Laissez un avis</a>
+    </div>
+
+		{# Affichage des commentaires #}
+        {% for comment in album.comments %}
+            <div class="card col-4 mx-auto my-3">
+                <div class="card-header d-flex justify-content-between">
+                    {{ comment.author.prenom }} {{ comment.author.nom }}
+                    <div class="">
+                        {# Affichage des boutons seulement si user qui a créé annonce #}
+                        {% if app.user and (app.user == comment.author or "ROLE_ADMIN" in app.user.roles) %}
+                            <form method="post" action="{{ path('app_comment_delete', {id:comment.id}) }}" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer ce commentaire ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+                            <a href="{{ path('app_comment_update', {id : comment.id}) }}">Update</a>
+                        {% endif %}                    
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ comment.content }}</p>
+                    <div class="d-flex justify-content-end">
+                        <p class="card-text text-muted"> <small> Publié le : {{ comment.publishedAt|date('d M Y')}}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+		{# Fin de la boucle sur les commentaires #}
+        
+{% endblock %}

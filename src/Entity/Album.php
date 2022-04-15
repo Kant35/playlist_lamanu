@@ -39,10 +39,16 @@ class Album
      */
     private $musics;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="album", orphanRemoval=true)
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->artists = new ArrayCollection();
         $this->musics = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function __toString()
@@ -127,6 +133,36 @@ class Album
             // set the owning side to null (unless already changed)
             if ($music->getAlbum() === $this) {
                 $music->setAlbum(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAlbum($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getAlbum() === $this) {
+                $comment->setAlbum(null);
             }
         }
 

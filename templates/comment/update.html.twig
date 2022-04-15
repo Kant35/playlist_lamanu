@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comment{% endblock %}
+
+{% block body %}
+    
+    <h1 class="text-center">Modifier votre avis</h1>
+
+    <div class="col-6 mx-auto">
+        {{ form_start(form)}}
+            {{ form_widget(form)}}
+
+            <button class="btn btn-primary">Modification</button>
+        {{ form_end(form)}}
+    </div>
+
+{% endblock %}

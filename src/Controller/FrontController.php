@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\User;
+use App\Entity\Album;
+use App\Entity\Artist;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\AlbumRepository;
@@ -17,7 +19,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class FrontController extends AbstractController
 {
     /**
-     * @IsGranted("ROLE_USER")
      * @Route("/", name="app_home")
      */
     public function index(AlbumRepository $albumRepository, Request $request): Response
@@ -53,6 +54,7 @@ class FrontController extends AbstractController
 
     /**
      * @Route("/inscription", name="app_inscription")
+     * Cette route etait un exemple pour découvrir l'insertion d'un utilisateur en BDD, Ainsi que le hashage du mdp
      */
     public function inscription(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher)
     {
@@ -84,6 +86,26 @@ class FrontController extends AbstractController
 
         return $this->renderForm("front/inscription.html.twig", [
             'form' => $form
+        ]);
+    }
+
+    /**
+     * @Route("/album/{id}", name="app_album")
+     */
+    public function album(Album $album)
+    {
+        return $this->render("front/album.html.twig", [
+            'album' => $album
+        ]);
+    }
+
+    /**
+     * @Route("/artist/{id}", name="app_artist")
+     */
+    public function artist(Artist $artist)
+    {
+        return $this->render("front/artist.html.twig", [
+            'artist' => $artist
         ]);
     }
 }
